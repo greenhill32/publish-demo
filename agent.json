@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0.0",
+  "name": "Publisher Demo Site",
+  "description": "Demonstrates AI-actionable capability for publishing content.",
+  "intents": [
+    {
+      "name": "publish_post",
+      "description": "Publishes a text post to a simulated social media platform.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "enum": ["twitter", "facebook", "linkedin", "instagram"],
+            "description": "The social media platform to publish to."
+          },
+          "content": {
+            "type": "string",
+            "description": "The text content of the post."
+          },
+          "media_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Optional URL to an image or video to attach to the post."
+          }
+        },
+        "required": ["platform", "content"]
+      },
+      "response": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["success", "failed"] },
+          "message": { "type": "string", "description": "A message describing the outcome." },
+          "post_id": { "type": "string", "description": "Simulated ID of the published post." }
+        },
+        "required": ["status", "message"]
+      },
+      "endpoint": "/api/publish",
+      "method": "POST",
+      "authentication": { "type": "none" }
+    }
+  ]
+}
