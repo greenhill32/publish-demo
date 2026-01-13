@@ -40,50 +40,68 @@
 <img id='bunny' draggable='true'>
 <div id='drop-target'></div>
 <script>
-const pairs = [{"id": "001", "bunny": "assets/pairs/001/bunny.png", "silhouette": "assets/pairs/001/silhouette.png"}, {"id": "002", "bunny": "assets/pairs/002/bunny.png", "silhouette": "assets/pairs/002/silhouette.png"}];
+// Define the available bunny/silhouette pairs. Each object points to its image assets.
+const pairs = [
+  { id: '001', bunny: 'assets/pairs/001/bunny.png', silhouette: 'assets/pairs/001/silhouette.png' },
+  { id: '002', bunny: 'assets/pairs/002/bunny.png', silhouette: 'assets/pairs/002/silhouette.png' }
+];
+
+// Track which pair is currently displayed
 let currentIndex = 0;
-function loadPair() {
+
+// Render the current pair onto the page
+function showPair() {
   const pair = pairs[currentIndex];
-  const bunny = document.getElementById('bunny');
-  bunny.src = pair.bunny;
-  const dropTarget = document.getElementById('drop-target');
-  dropTarget.style.backgroundImage = `url(${pair.silhouette})`;
-  dropTarget.innerHTML = '';
+  const bunnyImg = document.getElementById('bunny');
+  bunnyImg.src = pair.bunny;
+  const dropTargetDiv = document.getElementById('drop-target');
+  dropTargetDiv.style.backgroundImage = `url(${pair.silhouette})`;
+  dropTargetDiv.innerHTML = '';
 }
 
-document.getElementById('next').onclick = () => {
-  currentIndex = (currentIndex + 1) %% pairs.length;
-  loadPair();
-};
-document.getElementById('prev').onclick = () => {
-  currentIndex = (currentIndex - 1 + pairs.length) %% pairs.length;
-  loadPair();
-};
+// Switch to the next pair
+document.getElementById('next').addEventListener('click', () => {
+  currentIndex = (currentIndex + 1) % pairs.length;
+  showPair();
+});
 
+// Switch to the previous pair
+document.getElementById('prev').addEventListener('click', () => {
+  currentIndex = (currentIndex - 1 + pairs.length) % pairs.length;
+  showPair();
+});
+
+// Setup drag handling for the bunny
 const bunnyElem = document.getElementById('bunny');
 bunnyElem.addEventListener('dragstart', (e) => {
   e.dataTransfer.setData('text/plain', 'bunny');
 });
-const dropTarget = document.getElementById('drop-target');
-dropTarget.addEventListener('dragover', (e) => e.preventDefault());
-dropTarget.addEventListener('drop', (e) => {
+
+// Handle drop events on the silhouette
+const dropTargetDiv = document.getElementById('drop-target');
+dropTargetDiv.addEventListener('dragover', (e) => e.preventDefault());
+dropTargetDiv.addEventListener('drop', (e) => {
   e.preventDefault();
   const data = e.dataTransfer.getData('text/plain');
   if (data === 'bunny') {
-    dropTarget.innerHTML = '';
-    dropTarget.appendChild(bunnyElem.cloneNode(true));
-    for (let i=0; i<5; i++) {
+    // Clear any existing elements and place a copy of the bunny inside
+    dropTargetDiv.innerHTML = '';
+    dropTargetDiv.appendChild(bunnyElem.cloneNode(true));
+    // Emit hearts as a visual reward
+    for (let i = 0; i < 5; i++) {
       const heart = document.createElement('div');
       heart.className = 'heart';
       heart.textContent = '❤️';
-      heart.style.left = (50 + (Math.random() - 0.5) * 60) + '%%';
+      heart.style.left = (50 + (Math.random() - 0.5) * 60) + '%';
       heart.style.animationDuration = (1 + Math.random()) + 's';
-      dropTarget.appendChild(heart);
+      dropTargetDiv.appendChild(heart);
       setTimeout(() => heart.remove(), 1500);
     }
   }
 });
-window.onload = loadPair;
+
+// Initialize with the first pair when the page loads
+showPair();
 </script>
 </body>
 </html>
