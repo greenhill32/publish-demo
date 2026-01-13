@@ -1,0 +1,12 @@
+[
+  {
+    "id": "001",
+    "bunny": "assets/pairs/001/bunny.png",
+    "silhouette": "assets/pairs/001/silhouette.png"
+  },
+  {
+    "id": "002",
+    "bunny": "assets/pairs/002/bunny.png",
+    "silhouette": "assets/pairs/002/silhouette.png"
+  }
+]
